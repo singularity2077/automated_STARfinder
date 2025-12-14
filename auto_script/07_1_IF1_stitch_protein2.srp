@@ -1,0 +1,12 @@
+#!/bin/bash
+#SBATCH -o logs_stitchprotein2/stitchprotein2.%j.out
+#SBATCH -e logs_stitchprotein2/stitchprotein2.%j.err
+#SBATCH -J stitchprotein2
+#SBATCH -p C64M512G
+#SBATCH -c 16
+#SBATCH --time=24:00:00
+
+cp -v "\gpfs\share\home\2301920002\luocheng225_zlf_test\Sample2_HepeG2\02_registration\IF1\protein1/TileConfiguration.registered.txt" "\gpfs\share\home\2301920002\luocheng225_zlf_test\Sample2_HepeG2\02_registration\IF1\protein2/"
+
+source activate Fiji
+/gpfs/share/home/2301920002/Fiji.app/ImageJ-linux64 --headless --console --run "$(pwd)/07_1_IF1_stitch_protein2.bsh"

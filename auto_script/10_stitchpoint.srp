@@ -1,0 +1,20 @@
+#!/bin/bash
+#SBATCH -o logs_stitchpoint/stitchpoint.%j.out
+#SBATCH -e logs_stitchpoint/stitchpoint.%j.err
+#SBATCH -J stitchpoint
+#SBATCH -p C64M512G
+#SBATCH -c 8
+#SBATCH --time=24:00:00
+
+module purge
+module load matlab/2023a
+
+MATLAB_SRC="/gpfs/share/home/2301920002/TEST/starmap-matlab-sample1cluo/src/"
+MATLAB_ARCHIVE="/gpfs/share/home/2301920002/TEST/starmap-matlab-sample1cluo/archive/"
+CORE_MATLAB_DIR="/gpfs/share/home/2301920002/sample_new/Sample_re/sricpt/core_matlab.m"
+export MATLAB_SRC MATLAB_ARCHIVE CORE_MATLAB_DIR
+
+PROJECT_NAME="A1"
+PROJECT_ROOT="/gpfs/share/home/2301920002/sample_new/Sample_re/"
+
+matlab -batch "addpath('$CORE_MATLAB_DIR'); core_matlab('$PROJECT_NAME', 'stitchpoint', '$PROJECT_ROOT', '01_data', '02_registration', 'log')"

@@ -1,0 +1,10 @@
+#!/bin/bash
+#SBATCH -o logs_stitchprotein1/stitchprotein1.%j.out
+#SBATCH -e logs_stitchprotein1/stitchprotein1.%j.err
+#SBATCH -J stitchprotein1
+#SBATCH -p C64M512G
+#SBATCH -c 16
+#SBATCH --time=24:00:00
+
+source activate Fiji
+/gpfs/share/home/2301920002/Fiji.app/ImageJ-linux64 --headless --console --run "$(pwd)/06_IF1_stitch_protein1.bsh"

@@ -1,0 +1,12 @@
+// Set MPICBG parameters
+mpicbg.stitching.GlobalOptimization.ignoreZ = true;
+print("Set mpicbg.stitching.GlobalOptimization.ignoreZ = true;");
+
+// Import IJ
+import ij.IJ;
+
+// Run macro script
+String macroPath = "06_IF1_Macro_protein1.ijm";
+print("Running macro script: " + macroPath);
+IJ.runMacroFile(macroPath);
+print("Finished running macro script.");
