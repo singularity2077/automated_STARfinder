@@ -1,0 +1,172 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cell Line Upstream Analysis &mdash; STATES and Image Processing Pipeline 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Tissue Sample Upstream Analysis" href="tissue_upstream.html" />
+    <link rel="prev" title="STATES Analysis Setup &amp; Workflow" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            STATES and Image Processing Pipeline
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Tutorial</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../prerequisites.html">Prerequisites</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">STATES Analysis Setup &amp; Workflow</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Cell Line Upstream Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#key-resources">Key Resources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-by-step-process">Step-by-Step Process</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tissue_upstream.html">Tissue Sample Upstream Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../image_processing_setup/index.html">Image Processing Automation System Setup &amp; Workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../sample_practice/index.html">Sample Practices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">STATES and Image Processing Pipeline</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Tutorial</a></li>
+          <li class="breadcrumb-item"><a href="index.html">STATES Analysis Setup &amp; Workflow</a></li>
+      <li class="breadcrumb-item active">Cell Line Upstream Analysis</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/tutorial/states_analysis_setup/cellline_upstream.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cell-line-upstream-analysis">
+<h1>Cell Line Upstream Analysis<a class="headerlink" href="#cell-line-upstream-analysis" title="Link to this heading"></a></h1>
+<p>The upstream analysis for cell lines is located in the <code class="docutils literal notranslate"><span class="pre">cellline_upstream</span></code> folder. It includes the following steps: registration, spotfinding, decoding, segmentation, stitching, assignment.</p>
+<section id="key-resources">
+<h2>Key Resources<a class="headerlink" href="#key-resources" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>genes.csv</strong>: This file contains the target gene tri-barcode information.</p></li>
+<li><p><strong>STATE-matlab-cellline</strong>: This directory houses the core MATLAB script <code class="docutils literal notranslate"><span class="pre">core_matlab.m</span></code> and related MATLAB functions.</p></li>
+</ul>
+</section>
+<section id="step-by-step-process">
+<h2>Step-by-Step Process<a class="headerlink" href="#step-by-step-process" title="Link to this heading"></a></h2>
+<section id="registration-spotfinding">
+<h3>01_registration_spotfinding<a class="headerlink" href="#registration-spotfinding" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Perform global registration across all amplification rounds.</p></li>
+<li><p>Split and conduct local registration.</p></li>
+<li><p>Stitch back together.</p></li>
+<li><p>Register the staining rounds accordingly.</p></li>
+</ul>
+</section>
+<section id="if-mask">
+<h3>02_IF_mask<a class="headerlink" href="#if-mask" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Use Cellpose to perform 2D segmentation on DAPI and Flamingo staining.</p></li>
+<li><p>Obtain a 3D mask by element-wise multiplication of the mask and the original image.</p></li>
+</ul>
+</section>
+<section id="if-point-stitch">
+<h3>03_IF_point_stitch<a class="headerlink" href="#if-point-stitch" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Stitch all FOVs for DAPI.</p></li>
+<li><p>Apply the stitched transformation to other stainings and amplification rounds.</p></li>
+</ul>
+</section>
+<section id="assign">
+<h3>04_assign<a class="headerlink" href="#assign" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Assign amplification spots to the 3D mask.</p></li>
+<li><p>Generate the final output.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For more details, refer to the specific subdirectories and corresponding scripts in the <code class="docutils literal notranslate"><span class="pre">cellline_upstream</span></code> folder.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="STATES Analysis Setup &amp; Workflow" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tissue_upstream.html" class="btn btn-neutral float-right" title="Tissue Sample Upstream Analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Your Name/Organization.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

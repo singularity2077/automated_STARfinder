@@ -1,169 +1,169 @@
-# 图像处理流程自动化系统
+# Automated Image Processing Pipeline System
 
-## 项目概述
+## Project Overview
 
-这是一个用于自动化图像处理流程的系统，主要用于管理和执行一系列图像处理步骤，包括配准、拼接等操作。系统基于 SLURM 作业调度系统，支持并行处理和批量任务管理。
+This is a system for automating image processing workflows, primarily used for managing and executing a series of image processing steps, including registration, stitching, and other operations. The system is based on the SLURM job scheduling system and supports parallel processing and batch task management.
 
-## 主要功能
+## Main Features
 
-1. 全局配准（Global Registration）
-2. 局部配准（Local Registration）
-3. 点检测（Spot Finding）
-4. 局部拼接（Local Stitch）
-5. IF配准（IF Registration）
-6. IF2配准（IF2 Registration，可选）
-7. IF1拼接（IF1 Stitch）
-8. 点拼接（Point Stitch）
-9. IF2拼接（IF2 Stitch，可选）
+1. Global Registration
+2. Local Registration
+3. Spot Finding
+4. Local Stitch
+5. IF Registration
+6. IF2 Registration (optional)
+7. IF1 Stitch
+8. Point Stitch
+9. IF2 Stitch (optional)
 
-## 系统要求
+## System Requirements
 
 - Python 3.x
-- SLURM 作业调度系统
+- SLURM job scheduling system
 - MATLAB 2023a
 - ImageJ/Fiji
-- 足够的存储空间和计算资源
+- Sufficient storage space and computing resources
 
-## 目录结构
+## Directory Structure
 
 ```
 .
-├── main.py                 # 主程序
-├── generate_scripts.py     # 脚本生成器
-├── config.ini             # 配置文件
-├── 01_global_registration.sh     # 全局配准脚本
-├── 02_local_registration_batch*.sh  # 局部配准脚本
-├── 03_spot_finding_batch*.sh    # 点检测脚本
-├── 04_local_stitch.sh     # 局部拼接脚本
-├── 05_IF_registration.sh  # IF配准脚本
-├── 05_IF2_registration.sh # IF2配准脚本（如果启用）
-├── 06_IF1_stitch_*.srp    # IF1拼接脚本
-├── 07_*_IF1_stitch_*.srp  # 后续蛋白质拼接脚本
-├── 09_*_IF2_stitch_*.srp  # IF2拼接脚本（如果启用）
-├── 10_stitchpoint.srp     # 点拼接脚本
-├── logs_global_registration/    # 全局配准日志
-├── logs_local_registration/     # 局部配准日志
-├── logs_spot_finding/           # 点检测日志
-├── logs_local_stitch/           # 局部拼接日志
-├── logs_IF_registration/        # IF配准日志
-├── logs_stitchdapinew/          # DAPI拼接日志
-├── logs_stitchflanew/           # Flamingo拼接日志
-└── logs_stitchpoint/            # 点拼接日志
+├── main.py                 # Main program
+├── generate_scripts.py     # Script generator
+├── config.ini             # Configuration file
+├── 01_global_registration.sh     # Global registration script
+├── 02_local_registration_batch*.sh  # Local registration scripts
+├── 03_spot_finding_batch*.sh    # Spot finding scripts
+├── 04_local_stitch.sh     # Local stitch script
+├── 05_IF_registration.sh  # IF registration script
+├── 05_IF2_registration.sh # IF2 registration script (if enabled)
+├── 06_IF1_stitch_*.srp    # IF1 stitch scripts
+├── 07_*_IF1_stitch_*.srp  # Subsequent protein stitch scripts
+├── 09_*_IF2_stitch_*.srp  # IF2 stitch scripts (if enabled)
+├── 10_stitchpoint.srp     # Point stitch script
+├── logs_global_registration/    # Global registration logs
+├── logs_local_registration/     # Local registration logs
+├── logs_spot_finding/           # Spot finding logs
+├── logs_local_stitch/           # Local stitch logs
+├── logs_IF_registration/        # IF registration logs
+├── logs_stitchdapinew/          # DAPI stitch logs
+├── logs_stitchflanew/           # Flamingo stitch logs
+└── logs_stitchpoint/            # Point stitch logs
 ```
 
-## 配置文件说明
+## Configuration File Description
 
-配置文件 `config.ini` 包含以下主要部分：
+The configuration file `config.ini` contains the following main sections:
 
-- `[PROJECT]`：项目基本信息
-  - `project_name`：项目名称
-  - `project_root`：项目根目录
-  - `matlab_src`：MATLAB源代码路径
-  - `matlab_archive`：MATLAB归档路径
-  - `core_matlab_dir`：核心MATLAB代码目录
+- `[PROJECT]`: Basic project information
+  - `project_name`: Project name
+  - `project_root`: Project root directory
+  - `matlab_src`: MATLAB source code path
+  - `matlab_archive`: MATLAB archive path
+  - `core_matlab_dir`: Core MATLAB code directory
 
-- `[GLOBAL_REGISTRATION]`：全局配准参数
-  - `gr_array_tasks`：任务数量
-  - `gr_parallel_tasks`：并行任务数
+- `[GLOBAL_REGISTRATION]`: Global registration parameters
+  - `gr_array_tasks`: Number of tasks
+  - `gr_parallel_tasks`: Number of parallel tasks
 
-- `[LOCAL_REGISTRATION]`：局部配准参数
-  - `lr_array_tasks`：任务数量
-  - `lr_parallel_tasks`：并行任务数
-  - `spotfinding_method`：点检测方法
-  - `sqrt_pieces`：子图块数量
-  - `voxel_size`：体素大小
-  - `end_bases`：末端碱基数
-  - `barcode_mode`：条形码模式
-  - `split_loc`：分割位置
-  - `intensity_threshold`：强度阈值
+- `[LOCAL_REGISTRATION]`: Local registration parameters
+  - `lr_array_tasks`: Number of tasks
+  - `lr_parallel_tasks`: Number of parallel tasks
+  - `spotfinding_method`: Spot finding method
+  - `sqrt_pieces`: Number of sub-image blocks
+  - `voxel_size`: Voxel size
+  - `end_bases`: Number of end bases
+  - `barcode_mode`: Barcode mode
+  - `split_loc`: Split location
+  - `intensity_threshold`: Intensity threshold
 
-- `[LOCAL_STITCH]`：局部拼接参数
-  - `ls_array_tasks`：任务数量
-  - `ls_parallel_tasks`：并行任务数
+- `[LOCAL_STITCH]`: Local stitch parameters
+  - `ls_array_tasks`: Number of tasks
+  - `ls_parallel_tasks`: Number of parallel tasks
 
-- `[IF_REGISTRATION]`：IF配准参数
-  - `ir_array_tasks`：任务数量
-  - `ir_parallel_tasks`：并行任务数
+- `[IF_REGISTRATION]`: IF registration parameters
+  - `ir_array_tasks`: Number of tasks
+  - `ir_parallel_tasks`: Number of parallel tasks
 
-- `[IF2_REGISTRATION]`：IF2配准参数（可选）
-  - `if2_enabled`：是否启用IF2
-  - `ir2_array_tasks`：任务数量
-  - `ir2_parallel_tasks`：并行任务数
+- `[IF2_REGISTRATION]`: IF2 registration parameters (optional)
+  - `if2_enabled`: Whether IF2 is enabled
+  - `ir2_array_tasks`: Number of tasks
+  - `ir2_parallel_tasks`: Number of parallel tasks
 
-- `[IF1_GLOBAL_STITCH]`：IF1拼接参数
-  - `proteins`：蛋白质列表
-  - `imagej_path`：ImageJ路径
-  - `grid_type`：网格类型
-  - `grid_order`：网格顺序
-  - `grid_size_x`：网格X大小
-  - `grid_size_y`：网格Y大小
-  - `tile_overlap`：瓦片重叠度
+- `[IF1_GLOBAL_STITCH]`: IF1 stitch parameters
+  - `proteins`: Protein list
+  - `imagej_path`: ImageJ path
+  - `grid_type`: Grid type
+  - `grid_order`: Grid order
+  - `grid_size_x`: Grid X size
+  - `grid_size_y`: Grid Y size
+  - `tile_overlap`: Tile overlap
 
-- `[IF2_GLOBAL_STITCH]`：IF2拼接参数（可选）
-  - `if2_enabled`：是否启用IF2
-  - `proteins`：蛋白质列表
-  - `imagej_path`：ImageJ路径
+- `[IF2_GLOBAL_STITCH]`: IF2 stitch parameters (optional)
+  - `if2_enabled`: Whether IF2 is enabled
+  - `proteins`: Protein list
+  - `imagej_path`: ImageJ path
 
-## 使用方法
+## Usage
 
-1. 配置 `config.ini` 文件，设置相关参数
-2. 提交主程序：
+1. Configure the `config.ini` file with relevant parameters
+2. Submit the main program:
    ```bash
-   sbatch run_main.sh --startfrom 03 (可选) --endwith 05 (可选) --config my_config.ini (可选)
+   sbatch run_main.sh --startfrom 03 (optional) --endwith 05 (optional) --config my_config.ini (optional)
    ```
 
-注意：主程序会自动调用 `generate_scripts.py` 生成所需的脚本，无需手动运行。每次运行主程序时都会重新生成脚本，确保脚本与配置文件同步。
-(当然也可以自己提交generate_scripts.py生成处理脚本：
+Note: The main program will automatically call `generate_scripts.py` to generate the required scripts, so manual execution is not necessary. Scripts are regenerated each time the main program runs to ensure synchronization with the configuration file.
+(You can also manually submit `generate_scripts.py` to generate processing scripts:
    ```bash
    python generate_scripts.py
    ```
   )
 
-### `main.py`(可在提交`run_main.sh`时添加)可选参数
+### Optional Parameters for `main.py` (can be added when submitting `run_main.sh`)
 
-- `--config`：指定配置文件路径（默认：config.ini）
-- `--startfrom`：设置流程起始点（可选值：01-10，默认：01）
-- `--endwith`：设置流程结束点（可选值：01-10，默认：10）
+- `--config`: Specify the configuration file path (default: config.ini)
+- `--startfrom`: Set the starting point of the workflow (optional values: 01-10, default: 01)
+- `--endwith`: Set the ending point of the workflow (optional values: 01-10, default: 10)
 
-注意：
-- `endwith`的值必须大于或等于`startfrom`的值
-- 如果指定的步骤不存在，会执行到最后一个可用步骤
-- 所有步骤的编号必须与配置文件中的步骤对应
-- `endwith`参数指定的步骤会被包含在执行范围内
+Note:
+- The value of `endwith` must be greater than or equal to the value of `startfrom`
+- If the specified step does not exist, execution will proceed to the last available step
+- All step numbers must correspond to the steps in the configuration file
+- The step specified by the `endwith` parameter will be included in the execution range
 
-## 处理流程
+## Processing Workflow
 
-1. `01_global_registration.sh`：全局配准
-2. `02_local_registration_batch*.sh`：局部配准（分批次）
-3. `03_spot_finding_batch*.sh`：点检测（分批次）
-4. `04_local_stitch.sh`：局部拼接
-5. `05_IF_registration.sh`：IF配准
-6. `05_IF2_registration.sh`：IF2配准（如果启用）
-7. `06_IF1_stitch_*.srp`：IF1拼接
-8. `07_*_IF1_stitch_*.srp`：后续蛋白质拼接
-9. `09_*_IF2_stitch_*.srp`：IF2拼接（如果启用）
-10. `10_stitchpoint.srp`：点拼接
+1. `01_global_registration.sh`: Global registration
+2. `02_local_registration_batch*.sh`: Local registration (batched)
+3. `03_spot_finding_batch*.sh`: Spot finding (batched)
+4. `04_local_stitch.sh`: Local stitch
+5. `05_IF_registration.sh`: IF registration
+6. `05_IF2_registration.sh`: IF2 registration (if enabled)
+7. `06_IF1_stitch_*.srp`: IF1 stitch
+8. `07_*_IF1_stitch_*.srp`: Subsequent protein stitch
+9. `09_*_IF2_stitch_*.srp`: IF2 stitch (if enabled)
+10. `10_stitchpoint.srp`: Point stitch
 
-## 注意事项
+## Important Notes
 
-1. 所有脚本必须通过 SLURM 提交执行
-2. 确保有足够的存储空间和计算资源
-3. 配置文件中的路径必须使用绝对路径
-4. 处理过程中会生成大量临时文件，请确保有足够的磁盘空间
-5. 建议定期清理日志文件
+1. All scripts must be submitted and executed through SLURM
+2. Ensure sufficient storage space and computing resources
+3. Paths in the configuration file must use absolute paths
+4. The processing will generate a large number of temporary files, so ensure sufficient disk space
+5. It is recommended to regularly clean up log files
 
-## 错误处理
+## Error Handling
 
-- 如果脚本执行失败，请检查相应的日志文件
-- 常见错误包括：
-  - 路径不存在
-  - 权限不足
-  - 资源不足
-  - 配置文件格式错误
+- If script execution fails, please check the corresponding log files
+- Common errors include:
+  - Path does not exist
+  - Insufficient permissions
+  - Insufficient resources
+  - Configuration file format errors
 
-## 维护和更新
+## Maintenance and Updates
 
-- 定期检查日志文件
-- 监控系统资源使用情况
-- 及时清理临时文件
-- 保持配置文件更新
+- Regularly check log files
+- Monitor system resource usage
+- Clean up temporary files promptly
+- Keep configuration files updated

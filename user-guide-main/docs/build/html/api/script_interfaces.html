@@ -1,0 +1,166 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Script Interfaces &mdash; STATES and Image Processing Pipeline 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            STATES and Image Processing Pipeline
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sample_practice/index.html">Sample Practices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">STATES and Image Processing Pipeline</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Script Interfaces</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/script_interfaces.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="script-interfaces">
+<h1>Script Interfaces<a class="headerlink" href="#script-interfaces" title="Link to this heading"></a></h1>
+<p>This section describes the key scripts and their command-line interfaces for the Image Processing Automation System.</p>
+<section id="main-py">
+<h2><cite>main.py</cite><a class="headerlink" href="#main-py" title="Link to this heading"></a></h2>
+<p>The main orchestrator script for the pipeline. It reads the <code class="docutils literal notranslate"><span class="pre">config.ini</span></code>, generates step-specific scripts using <code class="docutils literal notranslate"><span class="pre">generate_scripts.py</span></code>, and submits them to SLURM.</p>
+<p><strong>Command-Line Arguments:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">&lt;path_to_config_ini&gt;</span></code>
+*   Optional.
+*   Specifies the path to the configuration file.
+*   Default: <code class="docutils literal notranslate"><span class="pre">config.ini</span></code> in the current working directory.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--startfrom</span> <span class="pre">&lt;step_number&gt;</span></code>
+*   Optional.
+*   Sets the starting step of the processing workflow.
+*   Valid values: <code class="docutils literal notranslate"><span class="pre">01</span></code> through <code class="docutils literal notranslate"><span class="pre">10</span></code> (or highest step number defined).
+*   Default: <code class="docutils literal notranslate"><span class="pre">01</span></code> (Global Registration).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--endwith</span> <span class="pre">&lt;step_number&gt;</span></code>
+*   Optional.
+*   Sets the final step of the processing workflow (inclusive).
+*   Valid values: <code class="docutils literal notranslate"><span class="pre">01</span></code> through <code class="docutils literal notranslate"><span class="pre">10</span></code>. Must be greater than or equal to <code class="docutils literal notranslate"><span class="pre">--startfrom</span></code>.
+*   Default: <code class="docutils literal notranslate"><span class="pre">10</span></code> (Point Stitch) or the last available step.
+*   If a specified step does not exist (e.g., IF2 disabled), the pipeline will execute up to the last valid step before it or skip to the next valid step.</p></li>
+</ul>
+<p><strong>Usage Example (typically via `run_main.sh` for SLURM):</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Assuming run_main.sh wraps the python call and handles sbatch submission</span>
+sbatch<span class="w"> </span>run_main.sh<span class="w"> </span>--startfrom<span class="w"> </span><span class="m">03</span><span class="w"> </span>--endwith<span class="w"> </span><span class="m">05</span><span class="w"> </span>--config<span class="w"> </span>my_experiment_config.ini
+</pre></div>
+</div>
+</section>
+<section id="generate-scripts-py">
+<h2><cite>generate_scripts.py</cite><a class="headerlink" href="#generate-scripts-py" title="Link to this heading"></a></h2>
+<p>This script is responsible for generating the individual shell scripts (<code class="docutils literal notranslate"><span class="pre">.sh</span></code>) and ImageJ/Fiji macro scripts (<code class="docutils literal notranslate"><span class="pre">.srp</span></code>) based on the parameters defined in <code class="docutils literal notranslate"><span class="pre">config.ini</span></code>. It is typically called automatically by <code class="docutils literal notranslate"><span class="pre">main.py</span></code> but can be run manually for debugging or pre-generation.</p>
+<p><strong>Command-Line Arguments:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">&lt;path_to_config_ini&gt;</span></code>
+*   Optional.
+*   Specifies the path to the configuration file.
+*   Default: <code class="docutils literal notranslate"><span class="pre">config.ini</span></code> in the current working directory.</p></li>
+</ul>
+<p><strong>Usage Example:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>generate_scripts.py<span class="w"> </span>--config<span class="w"> </span>my_experiment_config.ini
+</pre></div>
+</div>
+</section>
+<section id="generated-scripts">
+<h2>Generated Scripts<a class="headerlink" href="#generated-scripts" title="Link to this heading"></a></h2>
+<p>The following scripts are generated and used by the pipeline. They are designed to be submitted as SLURM jobs.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">01_global_registration.sh</span></code>: Performs global registration.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">02_local_registration_batch*.sh</span></code>: Performs local registration in batches. The <code class="docutils literal notranslate"><span class="pre">*</span></code> indicates multiple batch files may be generated.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">03_spot_finding_batch*.sh</span></code>: Performs spot finding in batches.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">04_local_stitch.sh</span></code>: Stitches locally registered image pieces.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">05_IF_registration.sh</span></code>: Performs registration for primary immunofluorescence channels.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">05_IF2_registration.sh</span></code>: (Optional) Performs registration for secondary immunofluorescence channels.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">06_IF1_stitch_*.srp</span></code>: ImageJ/Fiji macro for stitching a specific IF1 protein/channel (e.g., <code class="docutils literal notranslate"><span class="pre">06_IF1_stitch_DAPI.srp</span></code>). Multiple such scripts are generated based on the <code class="docutils literal notranslate"><span class="pre">proteins</span></code> list in <code class="docutils literal notranslate"><span class="pre">config.ini</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">07_*_IF1_stitch_*.srp</span></code>: (Naming convention may vary) Subsequent protein stitching scripts for IF1. The exact numbering and naming depend on the implementation in <code class="docutils literal notranslate"><span class="pre">generate_scripts.py</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">09_*_IF2_stitch_*.srp</span></code>: (Optional, naming convention may vary) ImageJ/Fiji macros for stitching IF2 proteins/channels.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">10_stitchpoint.srp</span></code>: ImageJ/Fiji macro for stitching decoded points or spot data.</p></li>
+</ul>
+<p>Each <code class="docutils literal notranslate"><span class="pre">.sh</span></code> script typically contains SLURM directives (<code class="docutils literal notranslate"><span class="pre">#SBATCH</span></code>) and the commands to execute the respective processing step, often involving calls to MATLAB or other tools. Each <code class="docutils literal notranslate"><span class="pre">.srp</span></code> file is an ImageJ/Fiji macro script.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Your Name/Organization.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
