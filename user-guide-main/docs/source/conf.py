@@ -65,6 +65,12 @@ html_theme = 'sphinx_rtd_theme'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
+# -- Options for GitHub Pages ------------------------------------------------
+# GitHub Pages 配置
+# 如果你的仓库名不是 user-guide-main，请修改下面的路径
+# 格式：https://用户名.github.io/仓库名/
+# html_baseurl = 'https://yourusername.github.io/user-guide-main/'
+
 # -- Options for MyST Parser -------------------------------------------------
 # If you want to use Markdown files
 source_suffix = {
