@@ -1,5 +1,13 @@
 # Complete Image Processing Pipeline Documentation
 
+## Documentation Links
+
+📖 **User Guide**: [STATES and Image Processing Pipeline User Guide](https://singularity2077.github.io/automated_STARfinder_userguide/)
+
+The user guide provides comprehensive information on setting up, using, and understanding the STATES (Spatially-resolved transcriptomics and translatomics employed simultaneously) analysis pipeline and the associated Image Processing Automation System.
+
+---
+
 ## Table of Contents
 1. [Pipeline Overview](#pipeline-overview)
 2. [Step 1: LIF to TIF File Conversion](#step-1-lif-to-tif-file-conversion)
